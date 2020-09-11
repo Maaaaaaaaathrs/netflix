@@ -1,0 +1,5 @@
+/movies-java/*.iml
+/movies-java/mvnw
+/movies-java/*.cmd
+/movies-java/target
+/movies-java/.idea

@@ -1,16 +1,18 @@
 package com.netflix.movies.controllers;
 
+import com.netflix.movies.dtos.ReviewDTO;
 import com.netflix.movies.responses.StandardResponseListMovie;
 import com.netflix.movies.responses.StandardResponseMovie;
 import com.netflix.movies.services.MovieService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 @RestController
 @Api(value = "Movies API",tags = { "Movies" })
@@ -29,15 +31,29 @@ public class MovieController {
 
     @ApiOperation("Search movies by genre")
     @ApiResponse(code = 200, message = "OK", response = StandardResponseListMovie.class)
-    @GetMapping(value = "/movie/genre/{genre}", produces = "application/json")
-    public ResponseEntity<StandardResponseListMovie> findMoviesByGenre(@PathVariable @ApiParam(required = true) String genre) {
-        return service.findMoviesByGenre(genre);
+    @GetMapping(value = "/movies/genres/{genre}", produces = "application/json")
+    public ResponseEntity<StandardResponseListMovie> findMoviesByGenre(@PathVariable("genre") @ApiParam(required = true) String genre) {
+            return service.findMoviesByGenre(genre);
+    }
+
+    @ApiOperation("Search movies by keyword")
+    @ApiResponse(code = 200, message = "OK", response = StandardResponseListMovie.class)
+    @GetMapping(value = "/movies", produces = "application/json")
+    public ResponseEntity<StandardResponseListMovie> findMoviesByKeyword(@RequestParam("keyword") @ApiParam(required = true) String keyword) {
+        return service.findMoviesByKeyword(keyword);
     }
 
     @ApiOperation("Get movie details by identification")
-    @ApiResponse(code = 200, message = "OK", response = StandardResponseListMovie.class)
-    @GetMapping(value = "/movie/{id}", produces = "application/json")
+    @ApiResponse(code = 200, message = "OK", response = StandardResponseMovie.class)
+    @GetMapping(value = "/movies/{id}", produces = "application/json")
     public ResponseEntity<StandardResponseMovie> getMovieDetails(@PathVariable @ApiParam(required = true) Integer id) {
         return service.findById(id);
+    }
+
+    @ApiOperation("Review a movie")
+    @ApiResponse(code = 201, message = "OK", response = StandardResponseMovie.class)
+    @PostMapping(value = "/movies/reviews/", produces = "application/json")
+    public ResponseEntity<StandardResponseMovie> reviewMovie(@RequestBody @ApiParam(name = "Review", value = "Review") ReviewDTO reviewDTO) {
+        return service.saveReview(reviewDTO);
     }
 }

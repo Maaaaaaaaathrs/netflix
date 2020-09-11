@@ -14,7 +14,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@Profile({"dev", "act", "hml","prd"})
 public class SwaggerConfig {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -34,8 +33,8 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Netflix - Filmes e séries")
-				.description("APIs relacionadas a serviços de filmes e séries.")
+		return new ApiInfoBuilder().title("Netflix - Filmes")
+				.description("API relacionada a serviços de filmes.")
 				.version(this.version)
 				.license("Apache License Version 2.0").licenseUrl("https://www.apache.com/licenses/LICENSE-2.0")
 				.build();
